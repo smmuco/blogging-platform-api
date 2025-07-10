@@ -16,9 +16,6 @@ namespace BloggingPlatform.Application.Validators.Post
             RuleFor(x => x.CategoryId)
                 .NotEmpty().WithMessage("Category required.")
                 .GreaterThan(0).WithMessage("Invalid category.");
-            RuleFor(x => x.AuthorId)
-                .NotEmpty().WithMessage("Author is required.")
-                .GreaterThan(0).WithMessage("Invalid author.");
         }
     }
 }
