@@ -7,8 +7,6 @@ namespace BloggingPlatform.Application.Validators.Post
     {
         public UpdatePostRequestValidator()
         { 
-            RuleFor(x => x.Id)
-                .GreaterThan(0).WithMessage("Invalid post ID.");
             RuleFor(x => x.Title)
                 .NotEmpty().WithMessage("Title is required.")
                 .MaximumLength(100).WithMessage("Title must not exceed 100 characters.");
