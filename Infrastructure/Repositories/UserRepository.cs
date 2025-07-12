@@ -3,9 +3,9 @@ using PersonalBloggingPlatform.Domain.Entities;
 
 namespace BloggingPlatform.Application.Repositories
 {
-    public class PostRepository : IPostRepository
+    public class UserRepository : IUserRepository
     {
-        public async Task<Post> CreateAsync(Post post)
+        public Task<User> CreateAsync(User user)
         {
             throw new NotImplementedException();
         }
@@ -15,22 +15,17 @@ namespace BloggingPlatform.Application.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetAllAsync()
+        public Task<List<User>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Post?> GetByIdAsync(int id)
+        public Task<User?> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetPostsByCategoryAsync(int categoryId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Post> UpdateAsync(int id, Post post)
+        public Task<User> UpdateAsync(int id, User user)
         {
             throw new NotImplementedException();
         }
