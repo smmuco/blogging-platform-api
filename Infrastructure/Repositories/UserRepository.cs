@@ -41,7 +41,6 @@ namespace BloggingPlatform.Application.Repositories
 
         public async Task<User> UpdateAsync(User user)
         {
-            _context.Users.Update(user);
             await _context.SaveChangesAsync();
             return user;
         }

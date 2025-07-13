@@ -52,7 +52,7 @@ namespace BloggingPlatform.Application.Repositories
 
         public async Task<Post> UpdateAsync( Post post)
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return post;
         }
     }
