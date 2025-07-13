@@ -1,33 +1,49 @@
 ﻿using BloggingPlatform.Application.Interfaces;
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using PersonalBloggingPlatform.Domain.Entities;
 
 namespace BloggingPlatform.Application.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public Task<User> CreateAsync(User user)
+        private readonly AppDbContext _context;
+        public UserRepository(AppDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<User> CreateAsync(User user)
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            await _context.Users
+                .Where(u => u.Id == id)
+                .ExecuteDeleteAsync();
+            return true;
         }
 
-        public Task<List<User>> GetAllAsync()
+        public async Task<List<User>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Users
+                .ToListAsync();
         }
 
-        public Task<User?> GetByIdAsync(int id)
+        public async Task<User?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public Task<User> UpdateAsync(int id, User user)
+        public async Task<User> UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
     }
 }

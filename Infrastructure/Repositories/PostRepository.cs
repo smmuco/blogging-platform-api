@@ -50,22 +50,10 @@ namespace BloggingPlatform.Application.Repositories
                 .ToListAsync();
         }
 
-        public Task<Post> UpdateAsync(int id, Post post)
+        public async Task<Post> UpdateAsync( Post post)
         {
-            var existingPost = _context.Posts.FirstOrDefault(p => p.Id == id);
-            if (existingPost == null)
-            {
-                throw new KeyNotFoundException($"Post with ID {id} not found.");
-            }
-            existingPost.Title = post.Title;
-            existingPost.Content = post.Content;
-            existingPost.UpdatedAt = DateTime.UtcNow;
-            existingPost.Author = post.Author;
-            existingPost.IsPublished = post.IsPublished;
-            existingPost.CategoryId = post.CategoryId;
-            _context.Posts.Update(existingPost);
             _context.SaveChanges();
-            return Task.FromResult(existingPost);
+            return post;
         }
     }
 }

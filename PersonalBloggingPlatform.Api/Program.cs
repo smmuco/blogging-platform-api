@@ -1,4 +1,6 @@
 using BloggingPlatform.Application.Mappings;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +13,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 var app = builder.Build();
 
