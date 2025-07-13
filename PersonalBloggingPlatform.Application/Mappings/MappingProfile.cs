@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using BloggingPlatform.Application.DTOs.Category;
 using BloggingPlatform.Application.DTOs.Post;
 using BloggingPlatform.Application.DTOs.User;
+using BloggingPlatform.Domain.Entities;
 using PersonalBloggingPlatform.Domain.Entities;
 
 namespace BloggingPlatform.Application.Mappings
@@ -18,6 +20,8 @@ namespace BloggingPlatform.Application.Mappings
             // User mappings
             CreateMap<User, UserResponse>();
             CreateMap<RegisterUserRequest, User>();
+            // Category mappings
+            CreateMap<CategoryDto, Category>();
         }
     }
 }

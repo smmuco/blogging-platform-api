@@ -1,4 +1,6 @@
-﻿using BloggingPlatform.Application.Interfaces.Repositories;
+﻿using AutoMapper;
+using BloggingPlatform.Application.DTOs.Category;
+using BloggingPlatform.Application.Interfaces.Repositories;
 using BloggingPlatform.Domain.Entities;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -8,13 +10,16 @@ namespace Infrastructure.Repositories
     public class CategoryRepository : ICategoryRepository
     {
         private readonly AppDbContext _context;
-        public CategoryRepository(AppDbContext context)
+        private readonly IMapper _mapper;
+        public CategoryRepository(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Category> CreateAsync(Category category)
+        public async Task<Category> CreateAsync(CategoryDto categoryDto)
         {
+            var category = _mapper.Map<Category>(categoryDto);
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
             return category;
@@ -42,8 +47,9 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<Category> UpdateAsync(Category category)
+        public async Task<Category> UpdateAsync(CategoryDto categoryDto)
         {
+            var category = _mapper.Map<Category>(categoryDto);
             await _context.SaveChangesAsync();
             return category;
         }

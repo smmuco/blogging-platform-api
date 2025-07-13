@@ -1,4 +1,5 @@
-﻿using BloggingPlatform.Domain.Entities;
+﻿using BloggingPlatform.Application.DTOs.Category;
+using BloggingPlatform.Domain.Entities;
 
 namespace BloggingPlatform.Application.Interfaces.Repositories
 {
@@ -6,8 +7,8 @@ namespace BloggingPlatform.Application.Interfaces.Repositories
     {
         Task<List<Category>> GetAllAsync();
         Task<Category?> GetByIdAsync(int id);
-        Task<Category> CreateAsync(Category category);
-        Task<Category> UpdateAsync(Category category);
+        Task<Category> CreateAsync(CategoryDto category);
+        Task<Category> UpdateAsync(CategoryDto category);
         Task<bool> DeleteAsync(int id);
     }
 }
