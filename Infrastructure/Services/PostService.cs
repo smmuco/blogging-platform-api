@@ -1,15 +1,15 @@
 ﻿using BloggingPlatform.Application.DTOs.Post;
-using BloggingPlatform.Application.Interfaces;
-using BloggingPlatform.Application.Mappings;
 using PersonalBloggingPlatform.Domain.Entities;
 using AutoMapper;
+using BloggingPlatform.Application.Interfaces.Services;
+using BloggingPlatform.Application.Interfaces.Repositories;
 namespace Infrastructure.Services
 {
     public class PostService : IPostService
     {
         private readonly IMapper _mapper;
         private readonly IPostRepository _postRepository;
-
+        // Constructor injection for dependencies
         public PostService(IMapper mapper, IPostRepository repository)
         {
             _mapper = mapper;
@@ -23,7 +23,11 @@ namespace Infrastructure.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            if(await _postRepository.GetByIdAsync(id) == null)
+            if (id <= 0)
+            {
+                return false; // Invalid ID
+            }
+            if (await _postRepository.GetByIdAsync(id) == null)
             {
                 return false; // Post not found
             }

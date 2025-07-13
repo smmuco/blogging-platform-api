@@ -1,7 +1,7 @@
 ﻿using BloggingPlatform.Application.DTOs.Post;
 using PersonalBloggingPlatform.Domain.Entities;
 
-namespace BloggingPlatform.Application.Interfaces
+namespace BloggingPlatform.Application.Interfaces.Services
 {
     public interface IPostService
     {

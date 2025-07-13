@@ -1,4 +1,4 @@
-﻿using BloggingPlatform.Application.Interfaces;
+﻿using BloggingPlatform.Application.Interfaces.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using PersonalBloggingPlatform.Domain.Entities;

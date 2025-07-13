@@ -1,6 +1,6 @@
 ﻿using PersonalBloggingPlatform.Domain.Entities;
 
-namespace BloggingPlatform.Application.Interfaces
+namespace BloggingPlatform.Application.Interfaces.Repositories
 {
     public interface IPostRepository
     {

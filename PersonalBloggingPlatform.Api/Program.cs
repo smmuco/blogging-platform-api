@@ -1,7 +1,9 @@
+using BloggingPlatform.Application.Interfaces.Security;
 using BloggingPlatform.Application.Mappings;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Persistence;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
