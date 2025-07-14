@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using BloggingPlatform.Application.DTOs.Category;
+using BloggingPlatform.Application.Exceptions;
 using BloggingPlatform.Application.Interfaces.Repositories;
 using BloggingPlatform.Application.Interfaces.Services;
 using BloggingPlatform.Domain.Entities;
@@ -23,15 +25,14 @@ namespace Infrastructure.Services
             return await _categoryRepository.CreateAsync(category);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
             if (category == null)
             {
-                return false; // Category not found
+                throw new NotFoundException($"User with id {id} not found.");
             }
             await _categoryRepository.DeleteAsync(id);
-            return true; // Assuming deletion is successful
         }
 
         public async Task<List<Category>> GetAllAsync()
@@ -41,18 +42,17 @@ namespace Infrastructure.Services
 
         public async Task<Category?> GetByIdAsync(int id)
         {
-            if (id <= 0)
-            {
-                return null; // Invalid ID
-            }
             var category = await _categoryRepository.GetByIdAsync(id);
-
+            if( category == null)
+            {
+                throw new NotFoundException($"Category with id {id} not found.");
+            }
             return category;
         }
 
         public async Task<Category> UpdateAsync(CategoryDto request)
         {
-            if (request.Id <= 0 || request.Id == null)
+            if (request.Id == null)
             {
                 throw new ArgumentException("Invalid category data.");
             }

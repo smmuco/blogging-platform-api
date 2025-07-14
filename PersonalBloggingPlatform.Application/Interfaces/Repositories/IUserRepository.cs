@@ -8,6 +8,6 @@ namespace BloggingPlatform.Application.Interfaces
         Task<User?> GetByIdAsync(int id);
         Task<User> CreateAsync(User user);
         Task<User> UpdateAsync(User user);
-        Task<bool> DeleteAsync(int id);
+        Task DeleteAsync(int id);
     }
 }

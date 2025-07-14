@@ -20,12 +20,11 @@ namespace BloggingPlatform.Application.Repositories
             return post;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             await _context.Posts
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
-            return true;
         }
 
         public async Task<List<Post>> GetAllAsync()
@@ -52,6 +51,7 @@ namespace BloggingPlatform.Application.Repositories
 
         public async Task<Post> UpdateAsync( Post post)
         {
+            _context.Posts.Update(post);
             await _context.SaveChangesAsync();
             return post;
         }

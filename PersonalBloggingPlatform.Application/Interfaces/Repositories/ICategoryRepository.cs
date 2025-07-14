@@ -9,6 +9,6 @@ namespace BloggingPlatform.Application.Interfaces.Repositories
         Task<Category?> GetByIdAsync(int id);
         Task<Category> CreateAsync(Category category);
         Task<Category> UpdateAsync(Category category);
-        Task<bool> DeleteAsync(int id);
+        Task DeleteAsync(int id);
     }
 }

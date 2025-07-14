@@ -9,7 +9,7 @@ namespace BloggingPlatform.Application.Interfaces.Services
         Task<Post?> GetByIdAsync(int id);
         Task<Post> CreateAsync(CreatePostRequest request);
         Task<Post> UpdateAsync(UpdatePostRequest request);
-        Task<bool> DeleteAsync(int id);
+        Task DeleteAsync(int id);
         Task<List<Post>> GetPostsByCategoryAsync(int categoryId);
     }
 }

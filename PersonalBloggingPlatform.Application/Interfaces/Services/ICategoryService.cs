@@ -11,6 +11,6 @@ namespace BloggingPlatform.Application.Interfaces.Services
         Task<Category?> GetByIdAsync(int id);
         Task<Category> CreateAsync(CategoryDto request);
         Task<Category> UpdateAsync(CategoryDto request);
-        Task<bool> DeleteAsync(int id);
+        Task DeleteAsync(int id);
     }
 }

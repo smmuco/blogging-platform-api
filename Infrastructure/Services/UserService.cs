@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using BloggingPlatform.Application.DTOs.User;
+using BloggingPlatform.Application.Exceptions;
 using BloggingPlatform.Application.Interfaces;
 using BloggingPlatform.Application.Interfaces.Security;
 using BloggingPlatform.Application.Interfaces.Services;
@@ -28,12 +30,12 @@ namespace Infrastructure.Services
 
         public async Task<User?> GetByIdAsync(int id)
         {
-            if (id <= 0)
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
             {
-                throw new ArgumentException("Invalid user ID", nameof(id));
+                throw new NotFoundException($"User with id {id} not found.");
             }
-
-            return await _userRepository.GetByIdAsync(id);
+            return user;
         }
 
         public async Task<User> CreateAsync(RegisterUserRequest request)
@@ -48,7 +50,7 @@ namespace Infrastructure.Services
             var existingUser = await _userRepository.GetByIdAsync(request.UserId);
             if (existingUser == null)
             {
-                throw new ArgumentException("User not found", nameof(request.UserId));
+                throw new NotFoundException($"User with id {request.UserId} not found.");
             }
 
             _mapper.Map(request ,existingUser);
@@ -60,13 +62,15 @@ namespace Infrastructure.Services
             return await _userRepository.UpdateAsync(existingUser);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            if (id <= 0)
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if (user == null)
             {
-                throw new ArgumentException("Invalid user ID", nameof(id));
+                throw new NotFoundException($"User with id {id} not found.");
             }
-            return await _userRepository.DeleteAsync(id);
+            await _userRepository.DeleteAsync(id);
         }
     }
 }

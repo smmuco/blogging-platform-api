@@ -22,12 +22,11 @@ namespace Infrastructure.Repositories
             return category;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             await _context.Categories
                 .Where(c => c.Id == id)
                 .ExecuteDeleteAsync();
-            return true;
         }
 
         public async Task<List<Category>> GetAllAsync()
@@ -46,6 +45,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Category> UpdateAsync(Category category)
         {
+            _context.Categories.Update(category);
             await _context.SaveChangesAsync();
             return category;
         }

@@ -1,7 +1,14 @@
-﻿namespace BloggingPlatform.Application.Interfaces.Services
-{
-    public class IUserService
-    {
+﻿using BloggingPlatform.Application.DTOs.User;
+using PersonalBloggingPlatform.Domain.Entities;
 
+namespace BloggingPlatform.Application.Interfaces.Services
+{
+    public interface IUserService
+    {
+        Task<List<User>> GetAllAsync();
+        Task<User?> GetByIdAsync(int id);
+        Task<User> CreateAsync(RegisterUserRequest request);
+        Task<User> UpdateAsync(UpdateUserRequest request);
+        Task DeleteAsync(int id);
     }
 }
