@@ -23,14 +23,11 @@ namespace Infrastructure.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            if (id <= 0)
+            if (id <= 0|| await _postRepository.GetByIdAsync(id) == null)
             {
                 return false; // Invalid ID
             }
-            if (await _postRepository.GetByIdAsync(id) == null)
-            {
-                return false; // Post not found
-            }
+
             await _postRepository.DeleteAsync(id);
             return true;
         }
@@ -42,43 +39,34 @@ namespace Infrastructure.Services
 
         public async Task<Post?> GetByIdAsync(int id)
         {
-            if (id <= 0)
+            var post = await _postRepository.GetByIdAsync(id);
+            if (id <= 0 || post == null)
             {
                 return null; // Invalid ID
             }
-            var post = await _postRepository.GetByIdAsync(id);
-            if ( post == null)
-            {
-                return null; // Post not found
-            }
+
             return post ;
         }
 
         public async Task<List<Post>> GetPostsByCategoryAsync(int categoryId)
         {
-            if (categoryId <= 0)
+            var posts = await _postRepository.GetPostsByCategoryAsync(categoryId);
+            if (categoryId <= 0 || posts == null)
             {
                 return new List<Post>(); // Invalid category ID
             }
-            var posts = await _postRepository.GetPostsByCategoryAsync(categoryId);
-            if (posts == null)
-            {
-                return new List<Post>(); // No posts found for the category
-            }
+
             return posts;
         }
 
         public async Task<Post> UpdateAsync(UpdatePostRequest request)
         {
-            if (request.Id <= 0)
+            var existingPost = await _postRepository.GetByIdAsync(request.Id);
+            if (request.Id <= 0 || existingPost == null)
             {
                 throw new ArgumentException("Invalid post ID.");
             } 
-            var existingPost = await _postRepository.GetByIdAsync(request.Id);
-            if (existingPost == null)
-            {
-                throw new KeyNotFoundException($"Post with ID {request.Id} not found.");
-            }
+            
             _mapper.Map(request, existingPost);
             existingPost.UpdatedAt = DateTime.UtcNow;
             

@@ -10,16 +10,13 @@ namespace Infrastructure.Repositories
     public class CategoryRepository : ICategoryRepository
     {
         private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
-        public CategoryRepository(AppDbContext context, IMapper mapper)
+        public CategoryRepository(AppDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
-        public async Task<Category> CreateAsync(CategoryDto categoryDto)
+        public async Task<Category> CreateAsync(Category category)
         {
-            var category = _mapper.Map<Category>(categoryDto);
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
             return category;
@@ -47,9 +44,8 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<Category> UpdateAsync(CategoryDto categoryDto)
+        public async Task<Category> UpdateAsync(Category category)
         {
-            var category = _mapper.Map<Category>(categoryDto);
             await _context.SaveChangesAsync();
             return category;
         }
