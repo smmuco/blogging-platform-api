@@ -6,7 +6,7 @@ namespace BloggingPlatform.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PostController : Controller
+    public class PostController : ControllerBase
     {
         private readonly IPostService _postService;
 
@@ -33,10 +33,7 @@ namespace BloggingPlatform.Api.Controllers
             {
                 return BadRequest("Post data is null");
             }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+
             var createdPost = await _postService.CreateAsync(createPostDto);
             return CreatedAtAction(nameof(GetPostById), new { id = createdPost.Id }, createdPost);
         }
@@ -48,10 +45,7 @@ namespace BloggingPlatform.Api.Controllers
             {
                 return BadRequest("Post data is null");
             }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+
             var updatedPost = await _postService.UpdateAsync(updatePostDto);
             return Ok(updatedPost);
         }
@@ -83,11 +77,6 @@ namespace BloggingPlatform.Api.Controllers
         {
             var posts = await _postService.GetAllAsync();
             return Ok(posts);
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
     }
 }
