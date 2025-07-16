@@ -12,12 +12,13 @@ namespace BloggingPlatform.Application.Repositories
         {
             _context = context;
         }
-        public async Task<User> CreateAsync(User user)
-        {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user;
-        }
+        
+        //public async Task<User> CreateAsync(User user)
+        //{
+        //    await _context.Users.AddAsync(user);
+        //    await _context.SaveChangesAsync();
+        //    return user;
+        //}
 
         public async Task DeleteAsync(int id)
         {

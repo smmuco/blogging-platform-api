@@ -1,5 +1,6 @@
 ﻿using BloggingPlatform.Application.DTOs.Post;
 using BloggingPlatform.Application.Interfaces.Services;
+using BloggingPlatform.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloggingPlatform.Api.Controllers
@@ -20,7 +21,7 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (id <= 0)
             {
-                return BadRequest("Invalid post ID");
+                throw new ArgumentException("Invalid category ID", nameof(id));
             }
             var post = await _postService.GetByIdAsync(id);
             return Ok(post);
@@ -31,7 +32,7 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (createPostDto == null)
             {
-                return BadRequest("Post data is null");
+                throw new ArgumentNullException(nameof(createPostDto), "Post data cannot be null");
             }
 
             var createdPost = await _postService.CreateAsync(createPostDto);
@@ -43,7 +44,7 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (updatePostDto == null)
             {
-                return BadRequest("Post data is null");
+                throw new ArgumentException("Invalid category ID", nameof(updatePostDto.Id));
             }
 
             var updatedPost = await _postService.UpdateAsync(updatePostDto);
@@ -55,7 +56,7 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (id <= 0)
             {
-                return BadRequest("Invalid post ID");
+                throw new ArgumentException("Invalid category ID", nameof(id));
             }
             await _postService.DeleteAsync(id);
             return NoContent();
@@ -66,7 +67,7 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (categoryId <= 0)
             {
-                return BadRequest("Invalid category ID");
+                throw new ArgumentException("Invalid category ID", nameof(categoryId));
             }
             var posts = await _postService.GetPostsByCategoryAsync(categoryId);
             return Ok(posts);

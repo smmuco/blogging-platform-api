@@ -7,7 +7,6 @@ namespace BloggingPlatform.Application.Interfaces.Services
     {
         Task<List<User>> GetAllAsync();
         Task<User?> GetByIdAsync(int id);
-        Task<User> CreateAsync(RegisterUserRequest request);
         Task<User> UpdateAsync(UpdateUserRequest request);
         Task DeleteAsync(int id);
     }

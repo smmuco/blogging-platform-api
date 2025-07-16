@@ -28,7 +28,7 @@ namespace BloggingPlatform.Api.Controllers
             var category = await _categoryService.GetByIdAsync(id);
             if (category == null)
             {
-                return NotFound($"Category with ID {id} not found.");
+                throw new NotFoundException($"Category with ID {id} not found.");
             }
             return Ok(category);
         }
@@ -38,7 +38,7 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (categoryDto == null)
             {
-                return BadRequest("Category data is null.");
+                throw new ArgumentNullException(nameof(categoryDto), "Category data cannot be null.");
             }
             var createdCategory = await _categoryService.CreateAsync(categoryDto);
             return CreatedAtAction(nameof(GetCategoryByIdAsync), new { id = createdCategory.Id }, createdCategory);
@@ -49,7 +49,7 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (categoryDto == null || categoryDto.Id == null)
             {
-                return BadRequest("Invalid category data.");
+                throw new ArgumentNullException(nameof(categoryDto), "Category data cannot be null or have an invalid ID.");
             }
             var updatedCategory = await _categoryService.UpdateAsync(categoryDto);
             return Ok(updatedCategory);
@@ -60,7 +60,7 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (id <= 0)
             {
-                return BadRequest("Invalid category ID.");
+                throw new ArgumentException("Invalid category ID", nameof(id));
             }
                 
             await _categoryService.DeleteAsync(id);

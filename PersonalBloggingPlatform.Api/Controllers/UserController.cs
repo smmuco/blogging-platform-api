@@ -19,21 +19,10 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (id <= 0)
             {
-                return BadRequest("Invalid user ID");
+                throw new ArgumentException("Invalid category ID", nameof(id));
             }
             var user = await _userService.GetByIdAsync(id);
             return Ok(user);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] RegisterUserRequest createUserDto)
-        {
-            if (createUserDto == null)
-            {
-                return BadRequest("User data is null");
-            }
-            var createdUser = await _userService.CreateAsync(createUserDto);
-            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
         }
 
         [HttpPut]
@@ -52,7 +41,7 @@ namespace BloggingPlatform.Api.Controllers
         {
             if (id <= 0)
             {
-                return BadRequest("Invalid user ID");
+                throw new ArgumentException("Invalid category ID", nameof(id));
             }
             await _userService.DeleteAsync(id);
             return NoContent();

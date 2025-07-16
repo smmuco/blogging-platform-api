@@ -10,7 +10,6 @@ namespace PersonalBloggingPlatform.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; }
         public string Author { get; set; }
-        public bool IsPublished { get; set; } = false;
         /// Navigation properties
         public int CategoryId { get; set; }
         public Category Category { get; set; }

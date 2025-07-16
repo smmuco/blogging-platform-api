@@ -8,7 +8,6 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string Author { get; set; }
-        public bool IsPublished { get; set; } = false;
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
     }
