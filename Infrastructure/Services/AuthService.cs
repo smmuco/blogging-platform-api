@@ -1,43 +1,72 @@
-﻿using BloggingPlatform.Application.DTOs.User;
+﻿using AutoMapper;
+using BloggingPlatform.Application.DTOs.User;
+using BloggingPlatform.Application.Exceptions;
+using BloggingPlatform.Application.Interfaces.Repositories;
+using BloggingPlatform.Application.Interfaces.Security;
 using BloggingPlatform.Application.Interfaces.Services;
+using Microsoft.Extensions.Logging;
+using PersonalBloggingPlatform.Domain.Entities;
 
 namespace Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
-        public Task<string> GenerateJwtTokenAsync(string username, string password)
+        private readonly IAuthRepository _authRepository;
+        private readonly IMapper _mapper;
+        private readonly ILogger<AuthService> _logger;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly ITokenService _tokenService;
+        public AuthService(IAuthRepository authRepository, IMapper mapper, ILogger<AuthService> logger, IPasswordHasher hasher, ITokenService tokenService)
         {
-            throw new NotImplementedException();
+            _authRepository = authRepository;
+            _mapper = mapper;
+            _logger = logger;
+            _passwordHasher = hasher;
+            _tokenService = tokenService;
         }
 
-        public Task GenerateUserAsync(RegisterUserRequest registerUser)
+        public async Task<UserResponse> RegisterUserAsync(RegisterUserRequest registerUser)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Registering user with email: {Email}", registerUser.Email);
+
+            var newUser = _mapper.Map<User>(registerUser);
+            newUser.PasswordHash = _passwordHasher.HashPassword(registerUser.Password);
+            await _authRepository.RegisterAsync(newUser);
+
+            _logger.LogInformation("User registered with ID: {Id}", newUser.Id);
+            return _mapper.Map<UserResponse>(newUser);
         }
 
-        public Task<bool> IsTokenValidAsync(string token)
+        public async Task<string> LoginUserAsync(LoginRequest loginRequest)
         {
-            throw new NotImplementedException();
-        }
+            _logger.LogInformation("Logging in user with email: {Email}", loginRequest.Username);
 
-        public Task LoginUserAsync(LoginRequest loginRequest)
-        {
-            throw new NotImplementedException();
-        }
+            var user = await _authRepository.GetUserByEmailAsync(loginRequest.Username);
+            if (user == null)
+            {
+                _logger.LogWarning("User with email {Email} not found", loginRequest.Username);
+                throw new UnauthorizedAccessException("Invalid credentials");
 
-        public Task<string> RefreshTokenAsync(string token)
-        {
-            throw new NotImplementedException();
+            }
+            var passwordchech = _passwordHasher.VerifyHashedPassword(loginRequest.Password, user.PasswordHash);
+            if (!passwordchech)
+            {
+                _logger.LogWarning("Invalid password for user with email {Email}", loginRequest.Email);
+                throw new UnauthorizedAccessException("Invalid credentials");
+            }
+            _logger.LogInformation("User logged in with ID: {Id}", user.Id);
+            return _tokenService.GenerateToken(user);
         }
-
-        public Task RevokeTokenAsync(string token)
+        public async Task<UserResponse?> GetUserByIdAsync(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> ValidateUserAsync(string username, string password)
-        {
-            throw new NotImplementedException();
+            _logger.LogInformation("Retrieving user with ID: {Id}", id);
+            var user = await _authRepository.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                _logger.LogWarning("User with ID {Id} not found", id);
+                throw new NotFoundException ($"User with ID {id} not found.");
+            }
+            return _mapper.Map<UserResponse>(user);
         }
     }
 }

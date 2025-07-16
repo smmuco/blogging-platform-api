@@ -17,6 +17,9 @@ namespace BloggingPlatform.Application.Validators.User
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("Invalid email format.");
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage("Confirm Password is required.")
+                .Equal(x => x.Password).WithMessage("Passwords do not match.");
         }
     }
 }

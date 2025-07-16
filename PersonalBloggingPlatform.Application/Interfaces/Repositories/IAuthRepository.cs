@@ -6,5 +6,6 @@ namespace BloggingPlatform.Application.Interfaces.Repositories
     {
         Task<User> RegisterAsync(User user);
         Task<User?> GetUserByEmailAsync(string email);
+        Task<User?> GetUserByIdAsync(int id);
     }
 }
