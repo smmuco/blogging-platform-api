@@ -42,7 +42,5 @@ namespace BloggingPlatform.Api.Middlewares
                 await context.Response.WriteAsJsonAsync(result);
             }
         }
-
-
     }
 }

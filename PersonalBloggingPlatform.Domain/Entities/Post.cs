@@ -9,9 +9,10 @@ namespace PersonalBloggingPlatform.Domain.Entities
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; }
-        public string Author { get; set; }
         /// Navigation properties
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+        public int UserId { get; set; }
+        public User Author{ get; set; }
     }
 }

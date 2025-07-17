@@ -1,6 +1,7 @@
 ﻿using BloggingPlatform.Application.DTOs.Category;
 using BloggingPlatform.Application.Exceptions;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloggingPlatform.Api.Controllers
@@ -33,6 +34,7 @@ namespace BloggingPlatform.Api.Controllers
             return Ok(category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateCategoryAsync([FromBody] CategoryDto categoryDto)
         {
@@ -44,6 +46,7 @@ namespace BloggingPlatform.Api.Controllers
             return CreatedAtAction(nameof(GetCategoryByIdAsync), new { id = createdCategory.Id }, createdCategory);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateCategoryAsync([FromBody] CategoryDto categoryDto)
         {
@@ -55,6 +58,7 @@ namespace BloggingPlatform.Api.Controllers
             return Ok(updatedCategory);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategoryAsync(int id)
         {

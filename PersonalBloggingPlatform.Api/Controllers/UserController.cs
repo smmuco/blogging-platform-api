@@ -1,9 +1,12 @@
-﻿using BloggingPlatform.Application.DTOs.User;
+﻿using System.Security.Claims;
+using BloggingPlatform.Application.DTOs.User;
 using BloggingPlatform.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloggingPlatform.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -14,6 +17,7 @@ namespace BloggingPlatform.Api.Controllers
             _userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
@@ -32,6 +36,14 @@ namespace BloggingPlatform.Api.Controllers
             {
                 return BadRequest("User data is null");
             }
+
+            int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            if (currentUserId != updateUserDto.UserId)
+            {
+                return Unauthorized("You are not authorized to update this user");
+            }
+
             var updatedUser = await _userService.UpdateAsync(updateUserDto);
             return Ok(updatedUser);
         }
@@ -43,10 +55,19 @@ namespace BloggingPlatform.Api.Controllers
             {
                 throw new ArgumentException("Invalid category ID", nameof(id));
             }
+
+            int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            if (currentUserId != id)
+            {
+                return Unauthorized("You are not authorized to update this user");
+            }
+
             await _userService.DeleteAsync(id);
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {

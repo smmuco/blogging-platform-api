@@ -42,18 +42,6 @@ namespace Infrastructure.Services
             return user;
         }
 
-        //public async Task<User> CreateAsync(RegisterUserRequest request)
-        //{
-        //    _logger.LogInformation("Creating a new user with email: {Email}", request.Email);
-            
-        //    var user = _mapper.Map<User>(request);
-        //    user.PasswordHash = _passwordHasher.HashPassword(request.Password);
-        //    var created = await _userRepository.CreateAsync(user);
-
-        //    _logger.LogInformation("User created with ID: {Id}", created.Id);
-        //    return created;
-        //}
-
         public async Task<User> UpdateAsync(UpdateUserRequest request)
         {
             _logger.LogInformation("Updating user with ID: {UserId}", request.UserId);

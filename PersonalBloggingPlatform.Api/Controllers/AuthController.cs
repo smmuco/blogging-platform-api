@@ -1,5 +1,6 @@
 ﻿using BloggingPlatform.Application.DTOs.User;
 using BloggingPlatform.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloggingPlatform.Api.Controllers
@@ -25,6 +26,7 @@ namespace BloggingPlatform.Api.Controllers
             return Ok(user);
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -32,6 +34,7 @@ namespace BloggingPlatform.Api.Controllers
             return Ok(new { Token = token });
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {

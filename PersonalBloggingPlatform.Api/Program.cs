@@ -1,4 +1,5 @@
 using System.Text;
+using BloggingPlatform.Api.Middlewares;
 using BloggingPlatform.Application.Interfaces.Security;
 using BloggingPlatform.Application.Mappings;
 using BloggingPlatform.Application.Settings;
@@ -28,8 +29,10 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-var jwtSettings = configuration.GetSection("JwtSettings");
-builder.Services.Configure<JwtSettings>(jwtSettings);
+var jwtSettingsSection = configuration.GetSection("JwtSettings");
+builder.Services.Configure<JwtSettings>(jwtSettingsSection);
+
+var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -44,9 +47,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSettings["Issuer"],
-        ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!))
+        ValidIssuer = jwtSettingsSection["Issuer"],
+        ValidAudience = jwtSettingsSection["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettingsSection["SecretKey"]!))
     };
 });
 
@@ -59,7 +62,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
