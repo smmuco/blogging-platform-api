@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Authentication;
+using AutoMapper;
 using BloggingPlatform.Application.DTOs.User;
 using BloggingPlatform.Application.Exceptions;
 using BloggingPlatform.Application.Interfaces.Repositories;
@@ -29,6 +30,18 @@ namespace Infrastructure.Services
         {
             _logger.LogInformation("Registering user with email: {Email}", registerUser.Email);
 
+            if (registerUser.Password != registerUser.ConfirmPassword)
+            {
+                _logger.LogWarning("Password and Confirm Password do not match for email: {Email}", registerUser.Email);
+                throw new ArgumentException("Password and Confirm Password do not match.");
+            }
+
+            if (await _authRepository.GetUserByEmailAsync(registerUser.Email) != null)
+            {
+                _logger.LogWarning("User with email {Email} already exists", registerUser.Email);
+                throw new AuthenticationException("User with this email already exists.");
+            }
+
             var newUser = _mapper.Map<User>(registerUser);
             newUser.PasswordHash = _passwordHasher.HashPassword(registerUser.Password);
             await _authRepository.RegisterAsync(newUser);
@@ -45,14 +58,16 @@ namespace Infrastructure.Services
             if (user == null)
             {
                 _logger.LogWarning("User with email {Email} not found", loginRequest.Username);
-                throw new UnauthorizedAccessException("Invalid credentials");
+                throw new AuthenticationException("Invalid email or password.");
 
             }
+
             var passwordchech = _passwordHasher.VerifyHashedPassword(loginRequest.Password, user.PasswordHash);
+
             if (!passwordchech)
             {
                 _logger.LogWarning("Invalid password for user with email {Email}", loginRequest.Email);
-                throw new UnauthorizedAccessException("Invalid credentials");
+                throw new AuthenticationException("Invalid email or password.");
             }
             _logger.LogInformation("User logged in with ID: {Id}", user.Id);
             return _tokenService.GenerateToken(user);
