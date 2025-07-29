@@ -174,7 +174,7 @@ namespace Tests.Services
 
             _authRepositoryMock
                 .Setup(r => r.GetUserByEmailAsync(loginRequest.Email))
-                .ReturnsAsync((User?)null);
+                .ReturnsAsync((null as User));
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<AuthenticationException>(

@@ -42,7 +42,7 @@ namespace Infrastructure.Services
             if (category == null)
             {
                 _logger.LogWarning("Category with ID: {id} not found for deletion.", id);
-                throw new NotFoundException($"User with id {id} not found.");
+                throw new NotFoundException($"Category with id {id} not found.");
             }
             await _categoryRepository.DeleteAsync(id);
 
